@@ -24,13 +24,17 @@ pki/**/secret*
 .vercel/
 .env*
 
-# Local AEGIS secrets
-AEGIS-SECRETS/
+# Private key material
 *.key
-*.pem
 *.p12
 *.pfx
 *.jks
+*.pem
+
+# Public AEGIS certificates needed by the signer
+!pki/issuers/emergency-communications-v8/issuer-cert.pem
+!pki/institutions/soa-university/ca-cert.pem
+
 
 # Local runtime / generated assets
 published/
@@ -55,3 +59,4 @@ transparency/*.db-journal
 transparency/*.jsonl
 
 vercel.json.disabled
+.vercel
