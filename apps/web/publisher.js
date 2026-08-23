@@ -1,10 +1,6 @@
 "use strict";
 
-const API_BASE =
-    window.location.hostname === "127.0.0.1" &&
-    window.location.port === "3000"
-        ? "http://127.0.0.1:8000"
-        : "/api";
+const API_BASE = "/api";
 const state = {
     token: sessionStorage.getItem(
         "aegis_publisher_token"

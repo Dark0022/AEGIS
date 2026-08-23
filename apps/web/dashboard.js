@@ -1,7 +1,6 @@
 "use strict";
 
-const API_BASE =
-    "http://127.0.0.1:8000";
+const API_BASE = "/api";
 
 const PERMISSIONS = Object.freeze({
     READ: "credential.read",
