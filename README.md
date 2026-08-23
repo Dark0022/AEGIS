@@ -101,23 +101,27 @@ The result is an architecture where the **public application does not need acces
                                            ┌───────────────┐
                                            │   PUBLISHED   │
                                            └───────────────┘
+```
 
+---
 
-Production
-Web Application
+# Production
 
-https://aegis-blush.vercel.app
+### Web Application
 
-API Health
+**https://aegis-blush.vercel.app**
 
-https://aegis-blush.vercel.app/api/health
+### API Health
 
-Isolated Signing Service
+**https://aegis-blush.vercel.app/api/health**
 
-https://aegis-signer.onrender.com/health
+### Isolated Signing Service
+
+**https://aegis-signer.onrender.com/health**
 
 The production API currently reports:
 
+```json
 {
   "status": "ok",
   "service": "aegis-verification-api",
@@ -125,38 +129,50 @@ The production API currently reports:
   "version": "0.7.0",
   "storage_backend": "postgres"
 }
+```
 
 The isolated signing service reports:
 
+```json
 {
   "status": "ok",
   "service": "aegis-signing-service"
 }
-Core Workflow
-1. Create
+```
+
+---
+
+# Core Workflow
+
+## 1. Create
 
 An authorized publisher creates a notice.
 
+```text
 PUBLISHER
     │
     ▼
 Create Draft
+```
 
 The notice is stored in PostgreSQL and an audit event is created.
 
-2. Determine Publication Policy
+---
+
+## 2. Determine Publication Policy
 
 AEGIS assigns a publication policy based on notice type.
 
 Current direct-publication categories include:
 
-Emergency
-Safety
-General
-General Announcement
+- Emergency
+- Safety
+- General
+- General Announcement
 
 Other categories require approval.
 
+```text
 DIRECT
     │
     └──────► Publisher may proceed to signing
@@ -164,12 +180,17 @@ DIRECT
 APPROVAL_REQUIRED
     │
     └──────► Approval required before signing
-3. Upload
+```
 
-The browser requests a short-lived presigned upload URL from the API.
+---
+
+## 3. Upload
+
+The browser requests a **short-lived presigned upload URL** from the API.
 
 The asset is then uploaded directly to Backblaze B2.
 
+```text
 Browser
    │
    │ request upload URL
@@ -179,13 +200,17 @@ AEGIS API
    │ presigned URL
    ▼
 Browser ───────────────► Backblaze B2
+```
 
 The private B2 credentials never need to be placed in browser code.
 
-4. Sign
+---
+
+## 4. Sign
 
 AEGIS asks the isolated signing service to process the uploaded asset.
 
+```text
 Vercel API
     │
     │ source asset
@@ -195,25 +220,34 @@ Render Signer
     │ private issuer key
     ▼
 Signed C2PA Asset
+```
 
 The private issuer key remains outside the public application environment.
 
-5. Verify
+---
+
+## 5. Verify
 
 The signed asset is independently checked before publication.
 
 AEGIS verifies:
 
+```text
 ✓ Signing credential trust
 ✓ Certificate validity
 ✓ Claim signature
 ✓ Content/data hash
 ✓ Provenance
 ✓ Credential lifecycle state
-6. Publish
+```
+
+---
+
+## 6. Publish
 
 Only after successful verification is the notice committed as published.
 
+```text
 Sign
   ↓
 Verify
@@ -221,13 +255,17 @@ Verify
 Trusted
   ↓
 PUBLISHED
+```
 
 The resulting notice contains the signed asset reference and cryptographic hash.
 
-Approval Workflow
+---
+
+# Approval Workflow
 
 For communications that require approval:
 
+```text
 DRAFT
   │
   ▼
@@ -244,41 +282,47 @@ VERIFICATION
   │
   ▼
 PUBLISHED
+```
 
 This separates content creation from publication authorization.
 
-Cryptographic Trust Model
+---
+
+# Cryptographic Trust Model
 
 AEGIS uses multiple layers of verification.
 
-Issuer Trust
+### Issuer Trust
 
 The signing certificate must be trusted through the configured AEGIS PKI trust chain.
 
-Signature Integrity
+### Signature Integrity
 
 The cryptographic signature must validate successfully.
 
-Content Integrity
+### Content Integrity
 
 The signed data must match its expected cryptographic hash.
 
-Provenance
+### Provenance
 
 The asset's C2PA provenance must validate.
 
-Credential Lifecycle
+### Credential Lifecycle
 
 The signing credential must be in an acceptable lifecycle state.
 
 A successful verification therefore represents a combined trust decision rather than a single signature check.
 
-Audit Trail
+---
+
+# Audit Trail
 
 AEGIS maintains a hash-linked audit chain.
 
 Example lifecycle:
 
+```text
 CREATED
    │
    ▼
@@ -298,6 +342,7 @@ SIGNED
    │
    ▼
 PUBLISHED
+```
 
 Each event links to the previous event through cryptographic hashes.
 
@@ -305,49 +350,60 @@ This allows AEGIS to detect tampering with the audit history.
 
 The API reports whether the audit chain remains valid:
 
+```json
 {
   "audit_chain_valid": true
 }
-Security Model
+```
+
+---
+
+# Security Model
 
 AEGIS deliberately separates sensitive responsibilities.
 
-Public/API Layer
+## Public/API Layer
 
 The Vercel application handles:
 
-Authentication
-Authorization
-Notice workflow
-PostgreSQL access
-B2 upload orchestration
-Verification
-Publication state
-Signing Layer
+- Authentication
+- Authorization
+- Notice workflow
+- PostgreSQL access
+- B2 upload orchestration
+- Verification
+- Publication state
+
+## Signing Layer
 
 The Render service handles:
 
-Private issuer key access
-Cryptographic signing
-Signing certificate chain
-C2PA asset creation
-Storage Layer
+- Private issuer key access
+- Cryptographic signing
+- Signing certificate chain
+- C2PA asset creation
+
+## Storage Layer
 
 Backblaze B2 handles:
 
-Source assets
-Signed assets
-Durable object storage
-Database Layer
+- Source assets
+- Signed assets
+- Durable object storage
+
+## Database Layer
 
 Neon/PostgreSQL handles:
 
-Notices
-Publishers
-Credentials
-Sessions
-Audit state
-Why the Signer Is Isolated
+- Notices
+- Publishers
+- Credentials
+- Sessions
+- Audit state
+
+---
+
+# Why the Signer Is Isolated
 
 The signing key is one of the most sensitive assets in the system.
 
@@ -355,6 +411,7 @@ AEGIS therefore avoids putting the private issuer key directly into the public V
 
 Instead:
 
+```text
 Public application
        │
        │ authenticated signing request
@@ -364,10 +421,15 @@ Isolated signer
        │ private key
        ▼
 Cryptographic signature
+```
 
 This reduces the blast radius of a compromise in the public application layer.
 
-Repository Structure
+---
+
+# Repository Structure
+
+```text
 AEGIS/
 │
 ├── api/
@@ -416,89 +478,111 @@ AEGIS/
 ├── uv.lock
 ├── LICENSE
 └── README.md
-Main Components
-apps/api
+```
+
+---
+
+# Main Components
+
+## `apps/api`
 
 The primary FastAPI application.
 
 Responsibilities include:
 
-Authentication
-Authorization
-Notice lifecycle
-Publication workflow
-B2 integration
-Signing-service integration
-Verification
-Audit APIs
-apps/web
+- Authentication
+- Authorization
+- Notice lifecycle
+- Publication workflow
+- B2 integration
+- Signing-service integration
+- Verification
+- Audit APIs
+
+---
+
+## `apps/web`
 
 Browser interfaces.
 
-Publisher
+### Publisher
 
 Create, edit, submit, approve where permitted, upload assets, and publish notices.
 
-Dashboard
+### Dashboard
 
 Operational view of communications and trust information.
 
-Admin
+### Admin
 
 Administrative credential and audit operations.
 
-Verification
+### Verification
 
 Independent verification of signed assets.
 
-packages/crypto
+---
+
+## `packages/crypto`
 
 Cryptographic primitives and PKI functionality.
 
 Includes:
 
-Hashing
-Signing
-Verification
-PKI handling
-Key providers
-Persistent key providers
-Certificate stores
-packages/provenance
+- Hashing
+- Signing
+- Verification
+- PKI handling
+- Key providers
+- Persistent key providers
+- Certificate stores
+
+---
+
+## `packages/provenance`
 
 C2PA and provenance functionality.
 
 Includes:
 
-C2PA asset creation
-C2PA signing
-C2PA verification
-Notice signing
-Tamper detection
-packages/trust
+- C2PA asset creation
+- C2PA signing
+- C2PA verification
+- Notice signing
+- Tamper detection
+
+---
+
+## `packages/trust`
 
 Governance and trust infrastructure.
 
 Includes:
 
-Notice storage
-Publisher authentication
-Administrator authentication
-Credentials
-Trust decisions
-PostgreSQL runtime
-Audit chains
-Verification state
-signer_service
+- Notice storage
+- Publisher authentication
+- Administrator authentication
+- Credentials
+- Trust decisions
+- PostgreSQL runtime
+- Audit chains
+- Verification state
+
+---
+
+## `signer_service`
 
 Isolated production signing service.
 
 This service is intentionally deployed separately from the main Vercel API.
 
-API
+---
+
+# API
 
 The production API currently exposes endpoints including:
 
+```text
 GET  /health
 
 POST /publisher/login
@@ -529,12 +613,17 @@ GET  /admin/audit
 GET  /credentials/{certificate_serial_number}
 GET  /credentials/{certificate_serial_number}/history
 POST /credentials/{certificate_serial_number}/revoke
-Environment Variables
+```
 
-Production secrets must never be committed to Git.
+---
+
+# Environment Variables
+
+Production secrets must **never** be committed to Git.
 
 Typical production configuration includes:
 
+```text
 DATABASE_URL
 
 B2_ENDPOINT
@@ -544,34 +633,39 @@ B2_APPLICATION_KEY
 
 AEGIS_ISSUER_KEY_PATH
 AEGIS_ISSUER_KEY_PASSWORD
+```
 
 Depending on deployment configuration, additional application variables may be required.
 
-Secret Handling Rules
+## Secret Handling Rules
 
 Keep production credentials in:
 
-Vercel Environment Variables
-Render Environment Variables
-Local .env.local for development only
+- Vercel Environment Variables
+- Render Environment Variables
+- Local `.env.local` for development only
 
-Production secrets should remain marked Sensitive.
+Production secrets should remain marked **Sensitive**.
 
 Never place secrets in:
 
-GitHub
-README files
-Frontend JavaScript
-Screenshots
-Public documentation
-Issue comments
-Commit messages
-PKI
+- GitHub
+- README files
+- Frontend JavaScript
+- Screenshots
+- Public documentation
+- Issue comments
+- Commit messages
+
+---
+
+# PKI
 
 AEGIS uses a certificate hierarchy for signing trust.
 
 Conceptually:
 
+```text
 Root CA
   │
   ▼
@@ -582,110 +676,175 @@ Issuer Certificate
   │
   ▼
 Signing Key
+```
 
 Public trust-chain certificates can be distributed with the application when required for verification.
 
 Private keys must never be committed.
 
-Local Development
+---
+
+# Local Development
 
 Clone the repository:
 
+```bash
 git clone https://github.com/Dark0022/AEGIS.git
 cd AEGIS
+```
 
 Create a virtual environment:
 
+```bash
 python -m venv .venv
-Windows
+```
+
+### Windows
+
+```cmd
 .venv\Scripts\activate
+```
 
 Install dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
-Or with uv:
+Or with `uv`:
 
+```bash
 uv sync
+```
 
 Start the API:
 
+```bash
 uv run uvicorn apps.api.main:app --reload
-Testing
+```
+
+---
+
+# Testing
 
 Run the complete test suite:
 
+```bash
 pytest
+```
 
 Run focused suites:
 
+```bash
 pytest packages/crypto
 pytest packages/provenance
 pytest packages/trust
 pytest apps/api
+```
 
 Useful checks before committing:
 
+```bash
 git diff --check
 git status
-Production Deployment
-Vercel
+```
+
+---
+
+# Production Deployment
+
+## Vercel
 
 The production frontend/API is deployed through Vercel.
 
+```bash
 vercel --prod
+```
 
 The production frontend uses a same-origin API:
 
+```javascript
 const API_BASE = "/api";
+```
 
 This is important because the browser should communicate with:
 
+```text
 https://aegis-blush.vercel.app/api
+```
 
 rather than a developer machine such as:
 
+```text
 http://127.0.0.1:8000
-Render
+```
 
-The isolated signer is deployed from render.yaml.
+---
+
+## Render
+
+The isolated signer is deployed from `render.yaml`.
 
 Typical startup:
 
+```bash
 uv run uvicorn signer_service.app:app \
   --host 0.0.0.0 \
   --port $PORT
+```
 
 Health endpoint:
 
+```text
 /health
-Backblaze B2
+```
+
+---
+
+## Backblaze B2
 
 The production bucket is private.
 
 Browser uploads use:
 
+```text
 Short-lived presigned S3 upload URL
         ↓
 Direct browser → B2 PUT
+```
 
 The bucket's S3-compatible CORS rules explicitly allow the production frontend origin for upload operations.
 
-Production Verification
+---
+
+# Production Verification
 
 Before considering a deployment healthy, verify:
 
-API
+## API
+
+```bash
 curl https://aegis-blush.vercel.app/api/health
-Signer
+```
+
+## Signer
+
+```bash
 curl https://aegis-signer.onrender.com/health
-Git
+```
+
+## Git
+
+```bash
 git status
 git log --oneline --decorate --max-count=5
-Browser
+```
+
+## Browser
 
 Verify:
 
+```text
 Publisher login
       ↓
 Notice creation
@@ -699,31 +858,38 @@ C2PA signing
 Independent verification
       ↓
 Publication
-Production Security Checklist
+```
+
+---
+
+# Production Security Checklist
 
 Before sharing or deploying the repository:
 
- No private keys committed
- No .env secrets committed
- No database URLs committed
- No B2 application keys committed
- No signing passwords committed
- Production credentials stored as Sensitive environment variables
- B2 bucket remains private
- B2 CORS restricted to approved origins
- Signing service isolated
- Public certificate chain verified
- Audit chain verified
- Production health endpoints respond successfully
- End-to-end publish test completed
- Compromised credentials rotated if exposed
-Team Development Model
+- [ ] No private keys committed
+- [ ] No `.env` secrets committed
+- [ ] No database URLs committed
+- [ ] No B2 application keys committed
+- [ ] No signing passwords committed
+- [ ] Production credentials stored as Sensitive environment variables
+- [ ] B2 bucket remains private
+- [ ] B2 CORS restricted to approved origins
+- [ ] Signing service isolated
+- [ ] Public certificate chain verified
+- [ ] Audit chain verified
+- [ ] Production health endpoints respond successfully
+- [ ] End-to-end publish test completed
+- [ ] Compromised credentials rotated if exposed
+
+---
+
+# Team Development Model
 
 The repository can be shared publicly for visibility and collaboration.
 
 Remember:
 
-Public repository access does not grant write access.
+> **Public repository access does not grant write access.**
 
 Team members can clone the repository without being collaborators.
 
@@ -731,6 +897,7 @@ Only people explicitly granted repository permissions should be able to push dir
 
 For safer collaboration, contributors should generally:
 
+```text
 Fork
   ↓
 Create branch
@@ -742,11 +909,17 @@ Open Pull Request
 Review
   ↓
 Merge
+```
 
 For a production security platform, branch protection and pull-request review are strongly recommended.
 
-Current Status
-Production
+---
+
+# Current Status
+
+## Production
+
+```text
 Vercel API                 ✅
 Neon PostgreSQL            ✅
 Backblaze B2               ✅
@@ -760,34 +933,49 @@ Publisher authentication   ✅
 Approval workflow          ✅
 Production browser upload  ✅
 Production publish flow    ✅
-Roadmap
+```
+
+---
+
+# Roadmap
 
 Planned improvements include:
 
-Notice Lifecycle
-Audited WITHDRAWN status
-Administrative archive/withdraw controls
-Historical notice views
-Better operational filtering
-Security
-Stronger production access controls
-Additional credential rotation tooling
-More deployment security checks
-Expanded end-to-end security tests
-Operations
-Better monitoring
-Deployment diagnostics
-Health dashboards
-More detailed audit inspection
-Developer Experience
-Improved documentation
-Easier local bootstrap
-Contributor guides
-Automated CI checks
-Philosophy
+## Notice Lifecycle
+
+- Audited `WITHDRAWN` status
+- Administrative archive/withdraw controls
+- Historical notice views
+- Better operational filtering
+
+## Security
+
+- Stronger production access controls
+- Additional credential rotation tooling
+- More deployment security checks
+- Expanded end-to-end security tests
+
+## Operations
+
+- Better monitoring
+- Deployment diagnostics
+- Health dashboards
+- More detailed audit inspection
+
+## Developer Experience
+
+- Improved documentation
+- Easier local bootstrap
+- Contributor guides
+- Automated CI checks
+
+---
+
+# Philosophy
 
 AEGIS is built around a distinction between:
 
+```text
 Having a file
         ≠
 Knowing who created it
@@ -797,9 +985,24 @@ Knowing whether it was authorized
 Knowing whether it was modified
         ≠
 Knowing whether the credential is trusted
+```
 
 AEGIS attempts to make those properties explicit and machine-verifiable.
 
-The goal is not simply to publish content.
+The goal is not simply to **publish content**.
 
-The goal is to publish content with evidence of authenticity.                                           
+The goal is to publish content with **evidence of authenticity**.
+
+---
+
+# License
+
+See [`LICENSE`](LICENSE).
+
+---
+
+
+<p align="center">
+  <strong>AEGIS</strong><br>
+  <em>Trust, backed by evidence.</em>
+</p>
