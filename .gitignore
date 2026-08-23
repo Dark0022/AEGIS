@@ -1,0 +1,57 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Pytest
+.pytest_cache/
+
+# Environment / secrets
+.env
+.env.*
+
+# AEGIS private PKI material
+pki/**/*.json
+pki/**/private*
+pki/**/secret*
+
+# Temporary files
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+.vercel/
+.env*
+
+# Local AEGIS secrets
+AEGIS-SECRETS/
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+
+# Local runtime / generated assets
+published/
+test_*.png
+test_*.jpg
+test_*.jpeg
+test_*.pdf
+
+# Backblaze local CLI credentials
+.b2_account_info
+
+# Local caches / logs
+*.log
+
+# Local agent tooling
+.agents/
+
+# Local transparency / audit state
+transparency/*.sqlite3
+transparency/*.db
+transparency/*.db-journal
+transparency/*.jsonl
+
+vercel.json.disabled

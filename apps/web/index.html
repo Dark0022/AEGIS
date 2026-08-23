@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AEGIS cryptographic authenticity, provenance, integrity, and credential verification."
+    >
+
+    <title>AEGIS — Authenticity &amp; Provenance</title>
+
+    <link
+        rel="stylesheet"
+        href="./styles.css"
+    >
+</head>
+
+<body>
+    <div class="background-grid"></div>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">A</div>
+
+            <div>
+                <div class="brand-name">
+                    AEGIS
+                </div>
+
+                <div class="brand-subtitle">
+                    Authenticity &amp; Provenance
+                </div>
+            </div>
+        </div>
+
+        <nav class="topbar-nav">
+            <a
+                class="topbar-link active"
+                href="./index.html"
+            >
+                VERIFY
+            </a>
+
+            <a
+                class="topbar-link"
+                href="./admin.html"
+            >
+                COMMAND CENTER
+            </a>
+        </nav>
+
+        <div class="topbar-status">
+            <div class="system-status">
+                <span
+                    id="api-dot"
+                    class="status-dot offline"
+                ></span>
+
+                <span id="api-status">
+                    API offline
+                </span>
+            </div>
+
+            <div class="environment-badge">
+                PRODUCATION
+            </div>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section
+            id="hero"
+            class="hero"
+        >
+            <div class="eyebrow">
+                CRYPTOGRAPHIC VERIFICATION
+            </div>
+
+            <h1>
+                Prove it.
+                <span>Verify it.</span>
+                Trust it.
+            </h1>
+
+            <p class="hero-copy">
+                AEGIS independently evaluates institutional identity,
+                cryptographic provenance, content integrity, and
+                credential lifecycle state before reaching a trust decision.
+            </p>
+
+            <div
+                id="drop-zone"
+                class="drop-zone"
+            >
+                <div class="drop-icon">
+                    ↑
+                </div>
+
+                <h2>
+                    Drop an official file here
+                </h2>
+
+                <p>
+                    PNG, JPEG, MP4, WAV, and other supported media
+                </p>
+
+                <label class="file-button">
+                    Choose file
+
+                    <input
+                        id="file-input"
+                        type="file"
+                        hidden
+                    >
+                </label>
+
+                <div class="privacy-note">
+                    Files are sent directly to the AEGIS verification API.
+                    They are processed by AEGIS and are not sent to an AI service.
+                </div>
+            </div>
+
+            <div
+                id="loading"
+                class="loading hidden"
+            >
+                <div class="spinner"></div>
+
+                <div>
+                    <strong>
+                        Verifying provenance
+                    </strong>
+
+                    <span>
+                        Checking signature, identity, integrity,
+                        provenance, and credential lifecycle state...
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="result-section"
+            class="result-section hidden"
+        >
+            <div class="result-header">
+                <div>
+                    <div class="eyebrow">
+                        AEGIS VERIFICATION RESULT
+                    </div>
+
+                    <h2 id="result-filename">
+                        —
+                    </h2>
+                </div>
+
+                <button
+                    id="verify-another"
+                    class="secondary-button"
+                    type="button"
+                >
+                    Verify another
+                </button>
+            </div>
+
+            <div
+                id="verdict-card"
+                class="verdict-card"
+            >
+                <div
+                    id="verdict-icon"
+                    class="verdict-icon"
+                >
+                    ?
+                </div>
+
+                <div class="verdict-content">
+                    <div
+                        id="verdict-status"
+                        class="verdict-status"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        id="verdict-message"
+                        class="verdict-message"
+                    >
+                        —
+                    </div>
+                </div>
+            </div>
+
+            <div class="decision-panel">
+                <div>
+                    <div class="eyebrow">
+                        TRUST DECISION
+                    </div>
+
+                    <h3>
+                        Why AEGIS reached this verdict
+                    </h3>
+                </div>
+
+                <p id="decision-explanation">
+                    —
+                </p>
+
+                <div
+                    id="decision-factors"
+                    class="decision-factors"
+                ></div>
+            </div>
+
+            <div class="signal-grid">
+                <article
+                    id="signal-card-issuer"
+                    class="signal-card"
+                >
+                    <div class="signal-label">
+                        ISSUER
+                    </div>
+
+                    <div
+                        id="signal-issuer"
+                        class="signal-value"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        id="signal-issuer-state"
+                        class="signal-state"
+                    >
+                        —
+                    </div>
+                </article>
+
+                <article
+                    id="signal-card-signature"
+                    class="signal-card"
+                >
+                    <div class="signal-label">
+                        SIGNATURE
+                    </div>
+
+                    <div
+                        id="signal-signature"
+                        class="signal-value"
+                    >
+                        —
+                    </div>
+
+                    <div class="signal-state">
+                        Claim signature
+                    </div>
+                </article>
+
+                <article
+                    id="signal-card-integrity"
+                    class="signal-card"
+                >
+                    <div class="signal-label">
+                        CONTENT INTEGRITY
+                    </div>
+
+                    <div
+                        id="signal-integrity"
+                        class="signal-value"
+                    >
+                        —
+                    </div>
+
+                    <div class="signal-state">
+                        Cryptographic content binding
+                    </div>
+                </article>
+
+                <article
+                    id="signal-card-credential"
+                    class="signal-card"
+                >
+                    <div class="signal-label">
+                        CREDENTIAL
+                    </div>
+
+                    <div
+                        id="signal-credential"
+                        class="signal-value"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        id="signal-credential-state"
+                        class="signal-state"
+                    >
+                        Current lifecycle state
+                    </div>
+                </article>
+            </div>
+
+            <div
+                id="warning-panel"
+                class="warning-panel hidden"
+            >
+                <div class="warning-icon">
+                    !
+                </div>
+
+                <div>
+                    <div
+                        id="warning-title"
+                        class="warning-title"
+                    >
+                        Verification warning
+                    </div>
+
+                    <div
+                        id="warning-message"
+                        class="warning-message"
+                    >
+                        —
+                    </div>
+                </div>
+            </div>
+
+            <div class="identity-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="eyebrow">
+                            CERTIFICATE IDENTITY
+                        </div>
+
+                        <h3>
+                            Signing credential
+                        </h3>
+                    </div>
+
+                    <div
+                        id="identity-trust-badge"
+                        class="identity-trust-badge"
+                    >
+                        —
+                    </div>
+                </div>
+
+                <div class="identity-grid">
+                    <div>
+                        <span class="identity-label">
+                            Organization
+                        </span>
+
+                        <strong id="identity-issuer">
+                            —
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="identity-label">
+                            Common name
+                        </span>
+
+                        <strong id="identity-common-name">
+                            —
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="identity-label">
+                            Certificate serial
+                        </span>
+
+                        <strong id="identity-serial">
+                            —
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="identity-label">
+                            Algorithm
+                        </span>
+
+                        <strong id="identity-algorithm">
+                            —
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="identity-label">
+                            Trust anchor
+                        </span>
+
+                        <strong id="identity-anchor">
+                            AEGIS Root CA
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span class="identity-label">
+                            Credential lifecycle
+                        </span>
+
+                        <strong id="identity-credential-state">
+                            —
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-grid">
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="eyebrow">
+                                EVIDENCE
+                            </div>
+
+                            <h3>
+                                Verification events
+                            </h3>
+                        </div>
+
+                        <div
+                            id="evidence-count"
+                            class="count-badge"
+                        >
+                            0
+                        </div>
+                    </div>
+
+                    <div
+                        id="evidence-list"
+                        class="evidence-list"
+                    ></div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="eyebrow">
+                                SECURITY MODEL
+                            </div>
+
+                            <h3>
+                                What AEGIS checked
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="architecture-list">
+                        <div class="architecture-item">
+                            <span class="architecture-icon">
+                                01
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Institutional identity
+                                </strong>
+
+                                <span>
+                                    X.509 certificate chain
+                                    anchored in AEGIS trust roots
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="architecture-item">
+                            <span class="architecture-icon">
+                                02
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Content provenance
+                                </strong>
+
+                                <span>
+                                    C2PA manifest and claim signature
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="architecture-item">
+                            <span class="architecture-icon">
+                                03
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Content integrity
+                                </strong>
+
+                                <span>
+                                    Cryptographic binding between the
+                                    signed claim and received bytes
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="architecture-item">
+                            <span class="architecture-icon">
+                                04
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Credential lifecycle
+                                </strong>
+
+                                <span>
+                                    Active, expired, or revoked
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="bottom-note">
+                <span class="shield">
+                    ◆
+                </span>
+
+                AEGIS never treats an AI prediction as proof of authenticity.
+                Cryptographic evidence and provenance remain the foundation.
+            </div>
+        </section>
+    </main>
+
+    <script
+        src="./app.js"
+        defer
+    ></script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AEGIS Command Center for trust infrastructure operations."
+    >
+
+    <title>AEGIS — Command Center</title>
+
+    <link
+        rel="stylesheet"
+        href="./dashboard.css?v=1"
+    >
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">
+                A
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    AEGIS
+                </div>
+
+                <div class="brand-subtitle">
+                    Command Center
+                </div>
+            </div>
+        </div>
+
+        <nav class="topnav">
+            <a
+                class="nav-link"
+                href="./index.html?v=11"
+            >
+                VERIFY
+            </a>
+
+            <a
+                class="nav-link"
+                href="./dashboard.html?v=1"
+            >
+                COMMAND CENTER
+            </a>
+
+            <a
+                class="nav-link"
+                href="./admin.html?v=10"
+            >
+                OPERATOR
+            </a>
+        </nav>
+
+        <div class="system-cluster">
+            <div class="system-status">
+                <span
+                    id="api-dot"
+                    class="status-dot offline"
+                ></span>
+
+                <span id="api-status">
+                    API offline
+                </span>
+            </div>
+
+            <div class="environment-badge">
+                DEVELOPMENT
+            </div>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section class="page-heading">
+            <div>
+                <div class="eyebrow">
+                    OPERATIONS
+                </div>
+
+                <h1>
+                    Command Center
+                </h1>
+
+                <p>
+                    Monitor AEGIS trust infrastructure, administrator
+                    activity, session state, and credential lifecycle events.
+                </p>
+            </div>
+
+            <div class="heading-actions">
+                <a
+                    class="secondary-button"
+                    href="./admin.html?v=10"
+                >
+                    Operator console
+                </a>
+
+                <a
+                    class="primary-button"
+                    href="./index.html?v=11"
+                >
+                    Verification console
+                </a>
+            </div>
+        </section>
+
+        <section
+            id="login-panel"
+            class="login-panel"
+        >
+            <div class="login-heading">
+                <div>
+                    <div class="eyebrow">
+                        ADMINISTRATOR AUTHORIZATION
+                    </div>
+
+                    <h2>
+                        Command Center session
+                    </h2>
+
+                    <p>
+                        Authenticate to access operational and audit data.
+                    </p>
+                </div>
+
+                <div
+                    id="login-status"
+                    class="state-badge locked"
+                >
+                    LOCKED
+                </div>
+            </div>
+
+            <div class="login-form">
+                <input
+                    id="username-input"
+                    class="text-input"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Administrator username"
+                    spellcheck="false"
+                >
+
+                <input
+                    id="password-input"
+                    class="text-input"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Administrator password"
+                >
+
+                <button
+                    id="login-button"
+                    class="primary-button"
+                    type="button"
+                >
+                    Authenticate
+                </button>
+            </div>
+
+            <div
+                id="login-message"
+                class="login-message"
+            >
+                Command Center is locked.
+            </div>
+        </section>
+
+        <section
+            id="dashboard-content"
+            class="hidden"
+        >
+            <section class="session-banner">
+                <div class="session-identity">
+                    <div class="eyebrow">
+                        ACTIVE OPERATOR
+                    </div>
+
+                    <strong id="operator-identity">
+                        —
+                    </strong>
+
+                    <span id="operator-username">
+                        —
+                    </span>
+                </div>
+
+                <div class="session-role-block">
+                    <span>
+                        ROLE
+                    </span>
+
+                    <strong
+                        id="operator-role"
+                        class="role-badge"
+                    >
+                        —
+                    </strong>
+                </div>
+
+                <div class="session-time-block">
+                    <span>
+                        SESSION
+                    </span>
+
+                    <strong id="session-countdown">
+                        15:00
+                    </strong>
+                </div>
+
+                <button
+                    id="logout-button"
+                    class="secondary-button"
+                    type="button"
+                >
+                    Lock session
+                </button>
+            </section>
+
+            <section class="metrics-grid">
+                <article class="metric-card">
+                    <span class="metric-label">
+                        API
+                    </span>
+
+                    <strong
+                        id="metric-api"
+                        class="metric-value good"
+                    >
+                        ONLINE
+                    </strong>
+
+                    <span class="metric-subtext">
+                        AEGIS verification service
+                    </span>
+                </article>
+
+                <article class="metric-card">
+                    <span class="metric-label">
+                        AUDIT CHAIN
+                    </span>
+
+                    <strong
+                        id="metric-audit"
+                        class="metric-value"
+                    >
+                        —
+                    </strong>
+
+                    <span class="metric-subtext">
+                        Cryptographic event history
+                    </span>
+                </article>
+
+                <article class="metric-card">
+                    <span class="metric-label">
+                        EVENTS
+                    </span>
+
+                    <strong
+                        id="metric-events"
+                        class="metric-value"
+                    >
+                        0
+                    </strong>
+
+                    <span class="metric-subtext">
+                        Administrator audit events
+                    </span>
+                </article>
+
+                <article class="metric-card">
+                    <span class="metric-label">
+                        CURRENT ROLE
+                    </span>
+
+                    <strong
+                        id="metric-role"
+                        class="metric-value"
+                    >
+                        —
+                    </strong>
+
+                    <span class="metric-subtext">
+                        Effective operator authority
+                    </span>
+                </article>
+            </section>
+
+            <section class="capability-panel">
+                <div class="panel-heading">
+                    <div>
+                        <div class="eyebrow">
+                            AUTHORIZATION
+                        </div>
+
+                        <h2>
+                            Effective capabilities
+                        </h2>
+                    </div>
+                </div>
+
+                <div
+                    id="capability-grid"
+                    class="capability-grid"
+                ></div>
+            </section>
+
+            <section class="content-grid">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <div class="eyebrow">
+                                ADMINISTRATOR AUDIT
+                            </div>
+
+                            <h2>
+                                Recent operator activity
+                            </h2>
+                        </div>
+
+                        <div
+                            id="audit-state"
+                            class="audit-badge"
+                        >
+                            —
+                        </div>
+                    </div>
+
+                    <div
+                        id="audit-list"
+                        class="audit-list"
+                    ></div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <div class="eyebrow">
+                                TRUST WORKFLOW
+                            </div>
+
+                            <h2>
+                                Operational path
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="workflow">
+                        <div class="workflow-item">
+                            <span class="workflow-number">
+                                01
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Verify content
+                                </strong>
+
+                                <span>
+                                    Validate C2PA provenance,
+                                    signature, and content integrity.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="workflow-connector"></div>
+
+                        <div class="workflow-item">
+                            <span class="workflow-number">
+                                02
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Resolve credential
+                                </strong>
+
+                                <span>
+                                    Map the signing certificate to
+                                    the AEGIS credential registry.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="workflow-connector"></div>
+
+                        <div class="workflow-item">
+                            <span class="workflow-number">
+                                03
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Evaluate lifecycle
+                                </strong>
+
+                                <span>
+                                    Determine whether the credential
+                                    is active, expired, or revoked.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="workflow-connector"></div>
+
+                        <div class="workflow-item">
+                            <span class="workflow-number">
+                                04
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Record activity
+                                </strong>
+
+                                <span>
+                                    Preserve administrator operations
+                                    in the audit chain.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="quick-actions">
+                <div class="panel-heading">
+                    <div>
+                        <div class="eyebrow">
+                            QUICK ACTIONS
+                        </div>
+
+                        <h2>
+                            AEGIS operations
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="quick-action-grid">
+                    <a
+                        class="quick-action"
+                        href="./index.html?v=11"
+                    >
+                        <span class="quick-action-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <strong>
+                                Verify an asset
+                            </strong>
+
+                            <span>
+                                Open the public verification console.
+                            </span>
+                        </div>
+                    </a>
+
+                    <a
+                        class="quick-action"
+                        href="./admin.html?v=10"
+                    >
+                        <span class="quick-action-icon">
+                            A
+                        </span>
+
+                        <div>
+                            <strong>
+                                Open operator console
+                            </strong>
+
+                            <span>
+                                Manage credential lifecycle and
+                                privileged actions.
+                            </span>
+                        </div>
+                    </a>
+
+                    <button
+                        id="refresh-audit-button"
+                        class="quick-action"
+                        type="button"
+                    >
+                        <span class="quick-action-icon">
+                            ↻
+                        </span>
+
+                        <div>
+                            <strong>
+                                Refresh audit
+                            </strong>
+
+                            <span>
+                                Reload the current administrator
+                                event chain.
+                            </span>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <footer class="footer-note">
+                <span class="footer-mark">
+                    ◆
+                </span>
+
+                AEGIS operational data is grounded in
+                cryptographic verification, credential state,
+                and administrator audit evidence.
+            </footer>
+        </section>
+    </main>
+
+    <script
+        src="./dashboard.js?v=1"
+        defer
+    ></script>
+</body>
+</html>

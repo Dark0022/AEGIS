@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AEGIS Official Communications Console."
+    >
+
+    <title>AEGIS — Official Communications</title>
+
+    <link
+        rel="stylesheet"
+        href="./publisher.css"
+    >
+</head>
+
+<body>
+    <div class="background-grid"></div>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">A</div>
+
+            <div>
+                <div class="brand-name">
+                    AEGIS
+                </div>
+
+                <div class="brand-subtitle">
+                    Official Communications
+                </div>
+            </div>
+        </div>
+
+        <nav class="topbar-nav">
+            <a
+                class="topbar-link"
+                href="./index.html"
+            >
+                VERIFY
+            </a>
+
+            <a
+                class="topbar-link"
+                href="./admin.html"
+            >
+                COMMAND CENTER
+            </a>
+
+            <a
+                class="topbar-link active"
+                href="./publisher.html"
+            >
+                COMMUNICATIONS
+            </a>
+        </nav>
+
+        <div class="topbar-status">
+            <div class="system-status">
+                <span
+                    id="api-dot"
+                    class="status-dot offline"
+                ></span>
+
+                <span id="api-status">
+                    API offline
+                </span>
+            </div>
+
+            <div
+                id="role-badge"
+                class="environment-badge"
+            >
+                PUBLICATION
+            </div>
+        </div>
+    </header>
+
+    <main class="shell">
+        <!-- Login -->
+        <section
+            id="login-view"
+            class="login-view"
+        >
+            <div class="eyebrow">
+                OFFICIAL COMMUNICATIONS
+            </div>
+
+            <h1>
+                Publish with
+                <span>proof.</span>
+            </h1>
+
+            <p class="hero-copy">
+                Authenticate as an authorized AEGIS communications
+                officer to create, review, approve, sign, and publish
+                official institutional communications.
+            </p>
+
+            <form
+                id="login-form"
+                class="panel login-panel"
+            >
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-kicker">
+                            AEGIS IDENTITY
+                        </div>
+
+                        <h2>
+                            Communications Login
+                        </h2>
+                    </div>
+                </div>
+
+                <label class="field">
+                    <span>
+                        Username
+                    </span>
+
+                    <input
+                        id="login-username"
+                        type="text"
+                        autocomplete="username"
+                        required
+                    >
+                </label>
+
+                <label class="field">
+                    <span>
+                        Password
+                    </span>
+
+                    <input
+                        id="login-password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </label>
+
+                <button
+                    id="login-button"
+                    class="button primary full-width"
+                    type="submit"
+                >
+                    Sign in
+                </button>
+
+                <div
+                    id="login-message"
+                    class="message hidden"
+                ></div>
+            </form>
+        </section>
+
+        <!-- Console -->
+        <section
+            id="console-view"
+            class="hidden"
+        >
+            <div class="console-heading">
+                <div>
+                    <div class="eyebrow">
+                        OFFICIAL COMMUNICATIONS
+                    </div>
+
+                    <h1>
+                        Communications
+                        <span>Console</span>
+                    </h1>
+
+                    <p class="hero-copy compact">
+                        Create and publish institutional communications
+                        under AEGIS cryptographic identity and provenance.
+                    </p>
+                </div>
+
+                <div class="identity-card">
+                    <div class="identity-label">
+                        SESSION
+                    </div>
+
+                    <div
+                        id="identity-name"
+                        class="identity-name"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        id="identity-details"
+                        class="identity-details"
+                    >
+                        —
+                    </div>
+
+                    <button
+                        id="logout-button"
+                        class="button secondary"
+                        type="button"
+                    >
+                        Lock session
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="global-message"
+                class="message hidden"
+            ></div>
+
+            <div class="console-grid">
+                <!-- Editor -->
+                <section class="panel editor-panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-kicker">
+                                NOTICE AUTHORING
+                            </div>
+
+                            <h2 id="editor-title">
+                                New notice
+                            </h2>
+                        </div>
+
+                        <button
+                            id="new-notice-button"
+                            class="button secondary"
+                            type="button"
+                        >
+                            New notice
+                        </button>
+                    </div>
+
+                    <form id="notice-form">
+                        <input
+                            id="notice-id"
+                            type="hidden"
+                        >
+
+                        <label class="field">
+                            <span>
+                                Title
+                            </span>
+
+                            <input
+                                id="notice-title"
+                                type="text"
+                                maxlength="300"
+                                placeholder="Official communication title"
+                                required
+                            >
+                        </label>
+
+                        <div class="field-grid">
+                            <label class="field">
+                                <span>
+                                    Notice type
+                                </span>
+
+                                <select
+                                    id="notice-type"
+                                    required
+                                >
+                                    <option value="Emergency">
+                                        Emergency
+                                    </option>
+
+                                    <option value="Safety">
+                                        Safety
+                                    </option>
+
+                                    <option value="General">
+                                        General
+                                    </option>
+
+                                    <option value="Academic">
+                                        Academic
+                                    </option>
+
+                                    <option value="Examination">
+                                        Examination
+                                    </option>
+
+                                    <option value="Finance">
+                                        Finance
+                                    </option>
+
+                                    <option value="Policy / Regulation">
+                                        Policy / Regulation
+                                    </option>
+
+                                    <option value="Admissions">
+                                        Admissions
+                                    </option>
+                                </select>
+                            </label>
+
+                            <label class="field">
+                                <span>
+                                    Audience
+                                </span>
+
+                                <input
+                                    id="notice-audience"
+                                    type="text"
+                                    maxlength="200"
+                                    value="ALL"
+                                    placeholder="ALL"
+                                    required
+                                >
+                            </label>
+                        </div>
+
+                        <div class="policy-card">
+                            <div>
+                                <div class="policy-label">
+                                    PUBLICATION POLICY
+                                </div>
+
+                                <strong id="policy-value">
+                                    DIRECT
+                                </strong>
+                            </div>
+
+                            <div
+                                id="policy-description"
+                                class="policy-description"
+                            >
+                                This communication may be signed and
+                                published directly by an authorized publisher.
+                            </div>
+                        </div>
+
+                        <label class="field">
+                            <span>
+                                Summary
+                            </span>
+
+                            <textarea
+                                id="notice-summary"
+                                maxlength="2000"
+                                rows="3"
+                                placeholder="Short description for the notice listing."
+                            ></textarea>
+                        </label>
+
+                        <label class="field">
+                            <span>
+                                Official content
+                            </span>
+
+                            <textarea
+                                id="notice-content"
+                                maxlength="100000"
+                                rows="10"
+                                placeholder="Write the complete official communication here."
+                                required
+                            ></textarea>
+                        </label>
+
+                        <label class="field">
+                            <span>
+                                Expiry
+                            </span>
+
+                            <input
+                                id="notice-expiry"
+                                type="datetime-local"
+                            >
+                        </label>
+
+                        <label class="field">
+                            <span>
+                                Final notice asset
+                            </span>
+
+                            <input
+                                id="notice-file"
+                                type="file"
+                                accept=".png,.jpg,.jpeg,.pdf"
+                            >
+
+                            <small class="field-help">
+                                Upload the final image or PDF that AEGIS
+                                will cryptographically sign.
+                            </small>
+                        </label>
+
+                        <div
+                            id="editor-actions"
+                            class="action-row"
+                        >
+                            <button
+                                id="save-button"
+                                class="button secondary"
+                                type="submit"
+                            >
+                                Save draft
+                            </button>
+
+                            <button
+                                id="submit-button"
+                                class="button warning hidden"
+                                type="button"
+                            >
+                                Submit for approval
+                            </button>
+
+                            <button
+                                id="publish-button"
+                                class="button primary hidden"
+                                type="button"
+                            >
+                                Sign &amp; Publish
+                            </button>
+
+                            <button
+                                id="approve-button"
+                                class="button approve hidden"
+                                type="button"
+                            >
+                                Approve
+                            </button>
+                        </div>
+                    </form>
+
+                    <div
+                        id="editor-message"
+                        class="message hidden"
+                    ></div>
+                </section>
+
+                <!-- Notice list -->
+                <section class="panel list-panel">
+                    <div class="panel-header">
+                        <div>
+                            <div class="panel-kicker">
+                                COMMUNICATIONS REGISTER
+                            </div>
+
+                            <h2>
+                                Notices
+                            </h2>
+                        </div>
+
+                        <button
+                            id="refresh-button"
+                            class="button secondary"
+                            type="button"
+                        >
+                            Refresh
+                        </button>
+                    </div>
+
+                    <div
+                        id="notice-list"
+                        class="notice-list"
+                    >
+                        <div class="empty-state">
+                            Loading notices...
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <script
+        src="./publisher.js"
+    ></script>
+</body>
+</html>

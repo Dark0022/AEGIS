@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AEGIS role-aware credential lifecycle operator console."
+    >
+
+    <title>AEGIS — Operator Console</title>
+
+    <link
+        rel="stylesheet"
+        href="./admin.css"
+    >
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">A</div>
+
+            <div>
+                <div class="brand-name">
+                    AEGIS
+                </div>
+
+                <div class="brand-subtitle">
+                    Operator Console
+                </div>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="operator-status">
+                <span
+                    id="api-dot"
+                    class="status-dot offline"
+                ></span>
+
+                <span id="api-status">
+                    API offline
+                </span>
+            </div>
+
+            <div class="environment-badge">
+                PRODUCTION
+            </div>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section class="page-heading">
+            <div>
+                <div class="eyebrow">
+                    TRUST ADMINISTRATION
+                </div>
+
+                <h1>
+                    Operator console
+                </h1>
+
+                <p>
+                    Manage credential trust state through the
+                    authenticated AEGIS control plane.
+                </p>
+            </div>
+
+            <a
+                class="secondary-button"
+                href="./index.html"
+            >
+                Verification console
+            </a>
+        </section>
+
+        <section class="auth-panel">
+            <div class="auth-heading">
+                <div>
+                    <div class="eyebrow">
+                        ADMINISTRATOR AUTHORIZATION
+                    </div>
+
+                    <h2>
+                        Secure operator session
+                    </h2>
+                </div>
+
+                <div
+                    id="auth-status"
+                    class="auth-status locked"
+                >
+                    LOCKED
+                </div>
+            </div>
+
+            <p>
+                Sign in with an AEGIS administrator identity.
+                Permissions are enforced by the API.
+            </p>
+
+            <div
+                id="session-details"
+                class="session-details hidden"
+            >
+                <div class="session-card identity-card">
+                    <span>OPERATOR</span>
+
+                    <strong id="session-identity">
+                        —
+                    </strong>
+
+                    <small id="session-username">
+                        —
+                    </small>
+                </div>
+
+                <div class="session-card">
+                    <span>ROLE</span>
+
+                    <strong class="role-holder">
+                        <span
+                            id="session-role"
+                            class="role-badge"
+                        >
+                            —
+                        </span>
+                    </strong>
+                </div>
+
+                <div class="session-card">
+                    <span>SESSION</span>
+
+                    <strong id="session-countdown">
+                        15:00
+                    </strong>
+                </div>
+            </div>
+
+            <div
+                id="permission-strip"
+                class="permission-strip hidden"
+            >
+                <div class="permission-item">
+                    <span
+                        id="perm-read"
+                        class="permission-dot denied"
+                    ></span>
+
+                    <span>Credential read</span>
+                </div>
+
+                <div class="permission-item">
+                    <span
+                        id="perm-audit"
+                        class="permission-dot denied"
+                    ></span>
+
+                    <span>Audit read</span>
+                </div>
+
+                <div class="permission-item">
+                    <span
+                        id="perm-revoke"
+                        class="permission-dot denied"
+                    ></span>
+
+                    <span>Credential revoke</span>
+                </div>
+
+                <div class="permission-item">
+                    <span
+                        id="perm-admin"
+                        class="permission-dot denied"
+                    ></span>
+
+                    <span>Admin management</span>
+                </div>
+            </div>
+
+            <div
+                id="login-form"
+                class="auth-row"
+            >
+                <input
+                    id="admin-username"
+                    class="token-input"
+                    type="text"
+                    autocomplete="username"
+                    spellcheck="false"
+                    placeholder="Administrator username"
+                >
+
+                <input
+                    id="admin-token"
+                    class="token-input"
+                    type="password"
+                    autocomplete="current-password"
+                    spellcheck="false"
+                    placeholder="Administrator password"
+                >
+
+                <button
+                    id="unlock-button"
+                    class="primary-button"
+                    type="button"
+                >
+                    Authenticate
+                </button>
+            </div>
+
+            <div
+                id="authenticated-controls"
+                class="authenticated-controls hidden"
+            >
+                <div class="session-active">
+                    <span class="session-active-dot"></span>
+
+                    <span id="session-active-label">
+                        Administrator session active
+                    </span>
+                </div>
+
+                <button
+                    id="lock-button"
+                    class="secondary-button"
+                    type="button"
+                >
+                    Lock session
+                </button>
+            </div>
+
+            <div
+                id="auth-message"
+                class="auth-message"
+            >
+                Operator console is locked.
+            </div>
+        </section>
+
+        <section
+            id="protected-console"
+            class="hidden"
+        >
+            <section class="lookup-panel">
+                <div class="panel-title-row">
+                    <div>
+                        <div class="eyebrow">
+                            CREDENTIAL LOOKUP
+                        </div>
+
+                        <h2>
+                            Certificate serial number
+                        </h2>
+                    </div>
+
+                    <div
+                        id="lookup-capability"
+                        class="capability-badge"
+                    >
+                        READ
+                    </div>
+                </div>
+
+                <div class="lookup-row">
+                    <input
+                        id="serial-input"
+                        class="serial-input"
+                        type="text"
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="Enter certificate serial number"
+                    >
+
+                    <button
+                        id="lookup-button"
+                        class="primary-button"
+                        type="button"
+                    >
+                        Inspect credential
+                    </button>
+                </div>
+
+                <div class="helper-text">
+                    The certificate serial identifies the X.509
+                    signing credential represented by the C2PA signature.
+                </div>
+            </section>
+
+            <section
+                id="message"
+                class="message hidden"
+            ></section>
+
+            <section
+                id="credential-section"
+                class="hidden"
+            >
+                <div class="credential-header">
+                    <div>
+                        <div class="eyebrow">
+                            CURRENT CREDENTIAL
+                        </div>
+
+                        <h2 id="credential-name">
+                            —
+                        </h2>
+                    </div>
+
+                    <div
+                        id="credential-status-badge"
+                        class="credential-status unknown"
+                    >
+                        UNKNOWN
+                    </div>
+                </div>
+
+                <div class="credential-grid">
+                    <article class="info-card">
+                        <span class="info-label">
+                            ORGANIZATION
+                        </span>
+
+                        <strong id="credential-organization">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            COMMON NAME
+                        </span>
+
+                        <strong id="credential-common-name">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            KEY ID
+                        </span>
+
+                        <strong id="credential-key-id">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            CERTIFICATE SERIAL
+                        </span>
+
+                        <strong id="credential-serial">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            ISSUED
+                        </span>
+
+                        <strong id="credential-issued">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            EXPIRES
+                        </span>
+
+                        <strong id="credential-expires">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            REVOKED
+                        </span>
+
+                        <strong id="credential-revoked">
+                            —
+                        </strong>
+                    </article>
+
+                    <article class="info-card">
+                        <span class="info-label">
+                            REVOCATION REASON
+                        </span>
+
+                        <strong id="credential-reason">
+                            —
+                        </strong>
+                    </article>
+                </div>
+
+                <div
+                    id="audit-access-panel"
+                    class="hidden"
+                >
+                    <section class="history-panel">
+                        <div class="panel-header">
+                            <div>
+                                <div class="eyebrow">
+                                    CREDENTIAL AUDIT TRAIL
+                                </div>
+
+                                <h3>
+                                    Credential history
+                                </h3>
+                            </div>
+
+                            <div
+                                id="audit-state"
+                                class="audit-badge"
+                            >
+                                —
+                            </div>
+                        </div>
+
+                        <div
+                            id="history-list"
+                            class="history-list"
+                        ></div>
+                    </section>
+                </div>
+
+                <div
+                    id="active-action-panel"
+                    class="action-panel hidden"
+                >
+                    <div class="action-panel-copy">
+                        <div class="eyebrow">
+                            PRIVILEGED ACTION
+                        </div>
+
+                        <h3>
+                            Revoke signing credential
+                        </h3>
+
+                        <p>
+                            This operation changes the current AEGIS
+                            trust state for content issued by this credential.
+                        </p>
+
+                        <div class="warning-line">
+                            <span class="warning-dot"></span>
+
+                            <span>
+                                This action changes the credential lifecycle permanently.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="revoke-form">
+                        <input
+                            id="reason-input"
+                            class="reason-input"
+                            type="text"
+                            maxlength="500"
+                            placeholder="Required reason for revocation"
+                        >
+
+                        <button
+                            id="revoke-button"
+                            class="danger-button"
+                            type="button"
+                        >
+                            Revoke credential
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    id="revoke-denied-panel"
+                    class="permission-denied-panel hidden"
+                >
+                    <div class="permission-denied-icon">
+                        —
+                    </div>
+
+                    <div>
+                        <div class="eyebrow">
+                            RESTRICTED OPERATION
+                        </div>
+
+                        <h3>
+                            Revocation is not available for your role.
+                        </h3>
+
+                        <p>
+                            The server requires the
+                            <code>credential.revoke</code> permission.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="revoked-state-panel"
+                    class="revoked-state-panel hidden"
+                >
+                    <div class="revoked-state-icon">
+                        ×
+                    </div>
+
+                    <div class="revoked-state-content">
+                        <div class="eyebrow">
+                            CREDENTIAL REVOKED
+                        </div>
+
+                        <h3>
+                            This signing credential is no longer active.
+                        </h3>
+
+                        <p>
+                            New AEGIS verification attempts will treat
+                            content issued by this credential as
+                            <strong>REVOKED_CREDENTIAL</strong>.
+                        </p>
+
+                        <div class="revoked-state-details">
+                            <div>
+                                <span>
+                                    REVOKED
+                                </span>
+
+                                <strong id="revoked-state-date">
+                                    —
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>
+                                    REASON
+                                </span>
+
+                                <strong id="revoked-state-reason">
+                                    —
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section
+                id="admin-audit-section"
+                class="history-panel admin-audit-panel hidden"
+            >
+                <div class="panel-header">
+                    <div>
+                        <div class="eyebrow">
+                            ADMINISTRATOR AUDIT
+                        </div>
+
+                        <h3>
+                            Operator actions
+                        </h3>
+                    </div>
+
+                    <div
+                        id="admin-audit-state"
+                        class="audit-badge"
+                    >
+                        —
+                    </div>
+                </div>
+
+                <div
+                    id="admin-audit-list"
+                    class="history-list"
+                ></div>
+            </section>
+        </section>
+    </main>
+
+    <script
+        src="./admin.js"
+        defer
+    ></script>
+</body>
+</html>

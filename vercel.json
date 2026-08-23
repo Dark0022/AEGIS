@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.py": {
+      "excludeFiles": "pki/root/root-key.json,pki/institutions/**/ca-key.json,pki/issuers/**/issuer-key.json,pki/**/*-key.json,transparency/*.sqlite3,transparency/*.db,transparency/*.db-journal,transparency/*.jsonl"
+    }
+  },
+  "routes": [
+    {
+      "src": "^/$",
+      "dest": "/apps/web/index.html"
+    },
+    {
+      "src": "^/admin$",
+      "dest": "/apps/web/admin.html"
+    },
+    {
+      "src": "^/api/(.*)$",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/apps/web/$1"
+    }
+  ]
+}
