@@ -34,7 +34,7 @@ pki/**/secret*
 # Public AEGIS certificates needed by the signer
 !pki/issuers/emergency-communications-v8/issuer-cert.pem
 !pki/institutions/soa-university/ca-cert.pem
-
+!pki/root/root-cert.pem
 
 # Local runtime / generated assets
 published/
