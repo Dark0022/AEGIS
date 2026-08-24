@@ -1,7 +1,7 @@
 # AEGIS
 
 <p align="center">
-  <strong>Authenticated Evidence & Governance Integrity System</strong>
+  <strong>Authenticated Evidence & Governance for Institutional Signals</strong>
 </p>
 
 <p align="center">
