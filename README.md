@@ -52,23 +52,23 @@ The result is an architecture where the **public application does not need acces
                          ┌──────────────────────────┐
                          │      AEGIS Web UI        │
                          │                          │
-                         │ Publisher / Admin /     │
-                         │ Verification Interfaces │
+                         │ Publisher / Admin /      │
+                         │ Verification Interfaces  │
                          └────────────┬─────────────┘
                                       │
                                       ▼
                          ┌──────────────────────────┐
                          │       Vercel API         │
-                         │        FastAPI            │
+                         │        FastAPI           │
                          │                          │
-                         │ Auth / Workflow / Trust │
+                         │  Auth / Workflow / Trust │
                          └───────┬──────────┬───────┘
                                  │          │
                      PostgreSQL  │          │ Presigned upload
                                  │          │
                                  ▼          ▼
                       ┌────────────────┐  ┌────────────────┐
-                      │ Neon PostgreSQL │  │  Backblaze B2  │
+                      │ Neon PostgreSQL│  │  Backblaze B2  │
                       │                │  │                │
                       │ Notices        │  │ Source Assets  │
                       │ Publishers     │  │ Signed Assets  │
@@ -82,8 +82,8 @@ The result is an architecture where the **public application does not need acces
                                       │   Isolated Signer      │
                                       │        Render          │
                                       │                        │
-                                      │ Private issuer key    │
-                                      │ C2PA / PKI signing    │
+                                      │ Private issuer key     │
+                                      │ C2PA / PKI signing     │
                                       └────────────┬───────────┘
                                                    │
                                                    ▼
